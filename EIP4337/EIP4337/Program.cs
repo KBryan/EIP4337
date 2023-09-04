@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Numerics;
 using System.Threading.Tasks;
+using Nethereum.Signer;
+using Nethereum.Web3.Accounts;
 using RestSharp;
 using Newtonsoft.Json;
+using Web3Dots.RPC.Providers;
 
 namespace EIP4337
 {
@@ -11,6 +15,12 @@ namespace EIP4337
     {
         public static async Task Main(string[] args)
         {
+            const string signingKey = "ADD_PRIVATE_KEY";
+            const string rpcUrl = "https://goerli.infura.io/v3/API_KEY";
+            const BigInteger CHAIN_ID = 1482601649;
+            var account = new Account(new EthECKey(signingKey), CHAIN_ID);
+            var provider = new JsonRpcProvider(account,rpcUrl);
+            Console.WriteLine("Balance: " + provider.GetBalance(account.Address).Result);
             var userOperationParams = new UserOperationParams
             {
                 Sender = "0x0000000000000000000000000000000000000000",
@@ -41,7 +51,7 @@ namespace EIP4337
             var jsonRpcRequestChainId = new JsonRpcRequest
             {
                 Method = "eth_chainId",
-                Params = new object[] { }  // Empty array as per your example
+                Params = new object[] { }  // Empty array 
             };
             // Get User Operation by Hash
             var jsonRpcRequestserOperationByHash = new JsonRpcRequest
@@ -53,9 +63,13 @@ namespace EIP4337
             var jsonRpcRequestEntryPoints = new JsonRpcRequest
             {
                 Method = "eth_supportedEntryPoints",
-                Params = new object[] { }  // Empty array as per your example
+                Params = new object[] { }  // Empty array as the method doesn't require parameters 
             };
-            
+            ///
+            /*
+            Pay Master
+            */
+            ///
             var jsonRpcRequestSponsorUserOperation = new JsonRpcRequest
             {
                 Method = "pm_sponsorUserOperation",
@@ -74,12 +88,11 @@ namespace EIP4337
 
         public static async Task<RestResponse> SendRequestAsync(JsonRpcRequest jsonRpcRequest)
         {
-            var options = new RestClientOptions("https://api.stackup.sh/v1/node/ADD_BUNDLER_RPC");
+            var options = new RestClientOptions("https://api.stackup.sh/v1/node/STACK_UP_API");
             var client = new RestClient(options);
             var request = new RestRequest("");
             request.AddHeader("accept", "application/json");
             request.AddJsonBody(JsonConvert.SerializeObject(jsonRpcRequest));
-
             return await client.PostAsync(request);
         }
     }
