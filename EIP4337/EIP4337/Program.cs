@@ -25,15 +25,16 @@ namespace EIP4337
         static Account _account;
         static JsonRpcProvider _provider;  
         static Contract _contractMint;
+        private static MessageSigner _signer;
         
         public static async Task Main(string[] args)
         {
             _contractMint =  new Contract(mintingABI, contractAddress);
             _account = new Account(new EthECKey(signingKey), chainId);
             _provider = new JsonRpcProvider(_account,rpcUrl);
-            var signer = new MessageSigner();
+            _signer = new MessageSigner();
 
-            Console.WriteLine("Sign Message: " + signer.HashAndSign("Hello World", signingKey ));
+            Console.WriteLine("Sign Message: " + _signer.HashAndSign("Hello World", signingKey ));
             
             var calldata = _contractMint.Calldata("safeMint", new object[]
             {
