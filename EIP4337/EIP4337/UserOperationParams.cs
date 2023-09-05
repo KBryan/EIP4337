@@ -12,7 +12,6 @@ namespace EIP4337
         public string MaxFeePerGas { get; set; }
         public string MaxPriorityFeePerGas { get; set; }
         public string PaymasterAndData { get; set; }
-        
         public string Signature { get; set; }
     }
 } 
