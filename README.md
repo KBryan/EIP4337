@@ -10,7 +10,7 @@ The program uses several NuGet packages:
 - `Nethereum.Web3.Accounts` for Ethereum account management
 - `RestSharp` for making HTTP requests
 - `Newtonsoft.Json` for JSON serialization and deserialization
-- `Web3Dots` for Ethereum smart contract interaction
+- `Web3.Net` for Ethereum smart contract interaction
 
 ## Namespace and Classes
 
