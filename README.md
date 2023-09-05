@@ -1,4 +1,4 @@
-# EIP4337 Program Documentation
+# EIP4337 Early Stages 
 
 This C# program is an example implementation of Ethereum Improvement Proposal 4337 (EIP-4337). The program demonstrates how to interact with an Ethereum smart contract to perform various operations like signing messages, minting tokens, and sending JSON-RPC requests.
 
