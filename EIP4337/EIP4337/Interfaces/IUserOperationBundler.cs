@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using EIP4337;
+using EIP4337.Interfaces;
 
 public delegate Task UserOperationMiddlewareFn(IUserOperationMiddlewareCtx context);
 

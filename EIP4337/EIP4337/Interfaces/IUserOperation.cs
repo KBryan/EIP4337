@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace EIP4337
+namespace EIP4337.Interfaces
 {
     public interface IUserOperation
     {

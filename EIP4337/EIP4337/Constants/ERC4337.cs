@@ -1,6 +1,6 @@
 namespace EIP4337.Constants
 {
-    public static class ERC4337
+    public static class Erc4337
     {
         public const string EntryPoint = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 

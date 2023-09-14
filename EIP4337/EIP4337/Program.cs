@@ -1,23 +1,32 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Signer;
 using Nethereum.Web3.Accounts;
 using RestSharp;
 using Newtonsoft.Json;
-using Web3Dots;
 using Web3Dots.RPC.Contracts;
 using Web3Dots.RPC.Providers;
-using Web3Dots.RPC.Signers;
 
 namespace EIP4337
 {
-    
-
-    internal class Program
+    public class JsonRpcRequestUserOp
     {
-        const string signingKey = "SIGNING_KEY";
+        [JsonProperty("jsonrpc")]
+        public string JsonRpc { get; set; } = "2.0";
+
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("method")]
+        public string Method { get; set; }
+
+        [JsonProperty("params")]
+        public object[] Params { get; set; }
+    }
+    internal class Program 
+    {
+        const string signingKey = "ADD_SIGNING-KEY";
         const string rpcUrl = "https://api.stackup.sh/v1/node/API_KEY";
         static BigInteger chainId = 1482601649;
         const string contractAddress = "0x0dB8dA9D41F6F0663559804A499Cf5842694D6aF";
@@ -26,7 +35,7 @@ namespace EIP4337
         static JsonRpcProvider _provider;  
         static Contract _contractMint;
         private static MessageSigner _signer;
-        
+
         public static async Task Main(string[] args)
         {
             _contractMint =  new Contract(mintingABI, contractAddress);
@@ -60,57 +69,73 @@ namespace EIP4337
             };
             
             // Send User Operation
-            var jsonRpcRequestSendUserOperation = new JsonRpcRequest
+            var jsonRpcRequestSendUserOperation = new JsonRpcRequestUserOp
             {
                 Method = "eth_sendUserOperation",
-                Params = new object[] { userOperationParams, "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" }
+                Params = new object[] { userOperationParams, "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" },
+                Id = 1
             };
             
             // Get UserOperation Receipt
-            var jsonRpcRequestUserOperationReceipt = new JsonRpcRequest
+            var jsonRpcRequestUserOperationReceipt = new JsonRpcRequestUserOp
             {
                 Method = "eth_getUserOperationReceipt",
-                Params = new object[] { "0x" }
+                Params = new object[] { "0xbcee47418db45b565284445cbe4cbb315dd72733fcd3e4e8dd72ffe29020c7cd" },
+                Id = 1
             };
             
             // Get Rpc Chain of Bundler
-            var jsonRpcRequestChainId = new JsonRpcRequest
+            var jsonRpcRequestChainId = new JsonRpcRequestUserOp
             {
                 Method = "eth_chainId",
-                Params = new object[] { }  // Empty array 
+                Params = new object[] { },
+                Id = 1
             };
             
             // Get User Operation by Hash
-            var jsonRpcRequestserOperationByHash = new JsonRpcRequest
+            var jsonRpcRequestserOperationByHash = new JsonRpcRequestUserOp
             {
                 Method = "eth_getUserOperationByHash",
-                Params = new object[] { "0x" }  // Your hash parameter
+                Params = new object[] { "0x6cd9b281472cb8420d2fc92733a88c931edfee3a2657e20c31448cdbc73e283c" },
+                Id = 1// Your hash parameter
             };
             
             // Get supported Entry Points
-            var jsonRpcRequestEntryPoints = new JsonRpcRequest
+            var jsonRpcRequestEntryPoints = new JsonRpcRequestUserOp
             {
                 Method = "eth_supportedEntryPoints",
-                Params = new object[] { }  // Empty array as the method doesn't require parameters 
+                Params = new object[] { },
+                Id = 1// Empty array as the method doesn't require parameters 
             };
             
-            var jsonRpcRequestSponsorUserOperation = new JsonRpcRequest
+            // Get supported Entry Points
+            var jsonRpcRequestBundlerState= new JsonRpcRequestUserOp
+            {
+                Method = "debug_bundler_setBundlingMode",
+                Params = new object[] { },
+                Id = 1// Empty array as the method doesn't require parameters 
+            };
+            
+            var jsonRpcRequestSponsorUserOperation = new JsonRpcRequestUserOp
             {
                 Method = "pm_sponsorUserOperation",
-                Params = new object[] { userOperationParams, "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", new { type = "payg" } }
+                Params = new object[] { userOperationParams, "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", new { type = "payg" } },
+                Id = 1
             };
             
-            var jsonRpcRequestPaymasterAccounts = new JsonRpcRequest
+            var jsonRpcRequestPaymasterAccounts = new JsonRpcRequestUserOp
             {
                 Method = "pm_accounts",
-                Params = new object[] { "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" }  // Your account parameter
+                Params = new object[] { "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" },
+                Id = 1// Your account parameter
             };
             // Send Request
-            var response = await SendRequestAsync(jsonRpcRequestChainId);
+            var response = await SendRequestAsync(jsonRpcRequestEntryPoints);
             Console.WriteLine("Response: " + response.Content);
         }
 
-        public static async Task<RestResponse> SendRequestAsync(JsonRpcRequest jsonRpcRequest)
+
+        private static async Task<RestResponse> SendRequestAsync(JsonRpcRequestUserOp jsonRpcRequest)
         {
             var options = new RestClientOptions(rpcUrl);
             var client = new RestClient(options);

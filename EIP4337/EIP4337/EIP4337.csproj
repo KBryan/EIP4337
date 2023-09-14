@@ -189,6 +189,12 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Constants\ERC4337.cs" />
+        <Compile Include="Constants\Kernel.cs" />
+        <Compile Include="Constants\Safe.cs" />
+        <Compile Include="Interfaces\IUserOperation.cs" />
+        <Compile Include="Interfaces\IUserOperationBundler.cs" />
+        <Compile Include="Interfaces\IUserOperationMiddlewareCtx.cs" />
         <Compile Include="JsonRpcRequest.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
