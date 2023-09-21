@@ -1,6 +1,6 @@
 # EIP4337 C# Early Stages 
 
-This C# program is an example implementation of Ethereum Improvement Proposal 4337 (EIP-4337). The program demonstrates how to work with smart accounts in C#. Early stages. 
+This C# program is an example implementation of Ethereum Improvement Proposal 4337 (EIP-4337). The program demonstrates how to work with smart accounts in C#.
 
 Todo: Add Smart Account Creation Script
 
